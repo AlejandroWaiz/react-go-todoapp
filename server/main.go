@@ -43,6 +43,27 @@ func postTodo(c *fiber.Ctx) error {
 
 }
 
+func patchTodo(c *fiber.Ctx) error {
+
+	id, err := c.ParamsInt("id")
+
+	if err != nil {
+		return c.Status(401).SendString("Invalid id")
+	}
+
+	for i, t := range AllTodo {
+
+		if t.ID == id {
+			AllTodo[i].Done = true
+			break
+		}
+
+	}
+
+	return c.JSON(AllTodo)
+
+}
+
 func healtcheck(c *fiber.Ctx) error {
 
 	return c.SendString("Healthcheck ok!")
