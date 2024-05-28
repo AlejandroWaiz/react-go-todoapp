@@ -4,15 +4,22 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
 
 	app := fiber.New()
 
+	app.Use(cors.New())
+
 	app.Get("/Healtcheck", healtcheck)
 
 	app.Post("/api/todos", postTodo)
+
+	app.Get("api/todos", getTodos)
+
+	app.Patch("api/todos/:id/done", patchTodo)
 
 	log.Fatal(app.Listen(":4000"))
 
@@ -25,6 +32,12 @@ type Todo struct {
 	Title string `json:"title"`
 	Done  bool   `json:"done"`
 	Body  string `json:"body"`
+}
+
+func getTodos(c *fiber.Ctx) error {
+
+	return c.JSON(AllTodo)
+
 }
 
 func postTodo(c *fiber.Ctx) error {
