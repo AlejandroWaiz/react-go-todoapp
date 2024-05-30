@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/AlejandroWaiz/go-react-todoapp/model"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
@@ -25,14 +26,7 @@ func main() {
 
 }
 
-var AllTodo []Todo
-
-type Todo struct {
-	ID    int    `json:"id"`
-	Title string `json:"title"`
-	Done  bool   `json:"done"`
-	Body  string `json:"body"`
-}
+var AllTodo []model.Todo
 
 func getTodos(c *fiber.Ctx) error {
 
@@ -42,7 +36,7 @@ func getTodos(c *fiber.Ctx) error {
 
 func postTodo(c *fiber.Ctx) error {
 
-	todo := Todo{}
+	todo := model.Todo{}
 
 	if err := c.BodyParser(&todo); err != nil {
 		return err
