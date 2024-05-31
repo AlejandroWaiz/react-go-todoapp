@@ -8,6 +8,7 @@ import (
 type Database struct {
 }
 
+// TODO: Cambiar las funciones Delete y SetTodoAsDone para que trabajen solo con el id ya que no es necesario el cuerpo completo
 type DatabaseImplementation interface {
 	PostTodo(model.Todo) ([]model.Todo, error)
 	UpdateTodo(todo model.Todo) ([]model.Todo, error)
@@ -18,7 +19,6 @@ type DatabaseImplementation interface {
 
 func New(database string) (DatabaseImplementation, error) {
 
-	//TODO: implementar el devolver el tipo de base segun el string que te pasen al invocar la funcion
 	switch database {
 
 	//TODO: crear logica para utilizar firestore
