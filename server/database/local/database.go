@@ -62,21 +62,23 @@ func (l *LocalDatabase) UpdateTodo(todo model.Todo) ([]model.Todo, error) {
 
 }
 
-func (l *LocalDatabase) DeleteTodo(todo model.Todo) ([]model.Todo, error) {
+func (l *LocalDatabase) DeleteTodo(id int) ([]model.Todo, error) {
 
 	var founded bool
 
+	var deleteElement = func(s []model.Todo, i int) []model.Todo {
+		s[i] = s[len(s)-1]
+		return s[:len(s)-1]
+	}
+
 	for i, t := range AllTodo {
 
-		if t.ID == todo.ID {
-
-			var emptyTodo model.Todo
-
-			AllTodo[i] = emptyTodo
+		if t.ID == id {
 
 			founded = true
 
-			break
+			AllTodo = deleteElement(AllTodo, i)
+
 		}
 
 	}
@@ -89,13 +91,13 @@ func (l *LocalDatabase) DeleteTodo(todo model.Todo) ([]model.Todo, error) {
 
 }
 
-func (l *LocalDatabase) SetTodoAsDone(todo model.Todo) ([]model.Todo, error) {
+func (l *LocalDatabase) SetTodoAsDone(id int) ([]model.Todo, error) {
 
 	var founded bool
 
 	for i, t := range AllTodo {
 
-		if t.ID == todo.ID {
+		if t.ID == id {
 
 			AllTodo[i].Done = true
 

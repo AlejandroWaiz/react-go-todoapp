@@ -61,7 +61,7 @@ func (r *Router) deleteTodo(c *fiber.Ctx) error {
 		return fiber.NewError(400, "[Router] Invalid Todo body")
 	}
 
-	AllTodo, err := r.db.DeleteTodo(todo)
+	AllTodo, err := r.db.DeleteTodo(todo.ID)
 
 	if err != nil {
 		return fiber.NewError(400, err.Error())
@@ -79,7 +79,7 @@ func (r *Router) setTodoAsDone(c *fiber.Ctx) error {
 		return fiber.NewError(400, "[Router] Invalid Todo body")
 	}
 
-	AllTodo, err := r.db.SetTodoAsDone(todo)
+	AllTodo, err := r.db.SetTodoAsDone(todo.ID)
 
 	if err != nil {
 		return fiber.NewError(400, err.Error())

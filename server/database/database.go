@@ -8,13 +8,12 @@ import (
 type Database struct {
 }
 
-// TODO: Cambiar las funciones Delete y SetTodoAsDone para que trabajen solo con el id ya que no es necesario el cuerpo completo
 type DatabaseImplementation interface {
 	PostTodo(model.Todo) ([]model.Todo, error)
 	UpdateTodo(todo model.Todo) ([]model.Todo, error)
 	GetTodos() ([]model.Todo, error)
-	DeleteTodo(todo model.Todo) ([]model.Todo, error)
-	SetTodoAsDone(todo model.Todo) ([]model.Todo, error)
+	DeleteTodo(id int) ([]model.Todo, error)
+	SetTodoAsDone(id int) ([]model.Todo, error)
 }
 
 func New(database string) (DatabaseImplementation, error) {
