@@ -16,6 +16,9 @@ type DatabaseImplementation interface {
 	SetTodoAsDone(id int) ([]model.Todo, error)
 }
 
+// Return new database.
+// Write 'local' to use local database. Local is the default database.
+// Firestore database coming soon.
 func New(database string) (DatabaseImplementation, error) {
 
 	switch database {

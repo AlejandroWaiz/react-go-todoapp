@@ -16,6 +16,7 @@ type RouterImplementation interface {
 	ListenAndServe()
 }
 
+// Returns new Fiber router with given database as data repository.
 func New(db database.DatabaseImplementation) RouterImplementation {
 
 	return &Router{db: db}

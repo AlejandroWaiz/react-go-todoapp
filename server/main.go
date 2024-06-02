@@ -1,78 +1,20 @@
 package main
 
 import (
-	"log"
-
-	"github.com/AlejandroWaiz/go-react-todoapp/model"
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/AlejandroWaiz/go-react-todoapp/database"
+	"github.com/AlejandroWaiz/go-react-todoapp/router"
 )
 
 func main() {
 
-	app := fiber.New()
-
-	app.Use(cors.New())
-
-	app.Get("/Healtcheck", healtcheck)
-
-	app.Post("/api/todos", postTodo)
-
-	app.Get("api/todos", getTodos)
-
-	app.Patch("api/todos/:id/done", patchTodo)
-
-	log.Fatal(app.Listen(":4000"))
-
-}
-
-var AllTodo []model.Todo
-
-func getTodos(c *fiber.Ctx) error {
-
-	return c.JSON(AllTodo)
-
-}
-
-func postTodo(c *fiber.Ctx) error {
-
-	todo := model.Todo{}
-
-	if err := c.BodyParser(&todo); err != nil {
-		return err
-	}
-
-	todo.ID = len(AllTodo) + 1
-
-	AllTodo = append(AllTodo, todo)
-
-	return c.JSON(AllTodo)
-
-}
-
-func patchTodo(c *fiber.Ctx) error {
-
-	id, err := c.ParamsInt("id")
+	db, err := database.New("local")
 
 	if err != nil {
-		return c.Status(401).SendString("Invalid id")
+		panic(err)
 	}
 
-	for i, t := range AllTodo {
+	router := router.New(db)
 
-		if t.ID == id {
-			AllTodo[i].Done = true
-			break
-		}
-
-	}
-
-	return c.JSON(AllTodo)
-
-}
-
-func healtcheck(c *fiber.Ctx) error {
-
-	return c.SendString("Healthcheck ok!")
+	router.ListenAndServe()
 
 }
