@@ -37,7 +37,7 @@ func (r *Router) ListenAndServe() {
 
 	app.Patch("/api/todos/:id/done", r.setTodoAsDone)
 
-	app.Delete("/api/todos/:id/done", r.deleteTodo)
+	app.Delete("/api/todos/:id/delete", r.deleteTodo)
 
 	log.Fatal(app.Listen(":4000"))
 

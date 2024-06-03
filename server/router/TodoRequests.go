@@ -1,6 +1,8 @@
 package router
 
 import (
+	"fmt"
+
 	"github.com/AlejandroWaiz/go-react-todoapp/model"
 	"github.com/gofiber/fiber/v2"
 )
@@ -39,6 +41,8 @@ func (r *Router) updateTodo(c *fiber.Ctx) error {
 
 	todo := model.Todo{}
 
+	fmt.Println(todo)
+
 	if err := c.BodyParser(&todo); err != nil {
 		return fiber.NewError(400, "[Router] Invalid Todo body")
 	}
@@ -55,13 +59,13 @@ func (r *Router) updateTodo(c *fiber.Ctx) error {
 
 func (r *Router) deleteTodo(c *fiber.Ctx) error {
 
-	todo := model.Todo{}
+	id, err := c.ParamsInt("id")
 
-	if err := c.BodyParser(&todo); err != nil {
-		return fiber.NewError(400, "[Router] Invalid Todo body")
+	if err != nil {
+		return c.Status(401).SendString("Invalid id")
 	}
 
-	AllTodo, err := r.db.DeleteTodo(todo.ID)
+	AllTodo, err := r.db.DeleteTodo(id)
 
 	if err != nil {
 		return fiber.NewError(400, err.Error())
@@ -73,13 +77,13 @@ func (r *Router) deleteTodo(c *fiber.Ctx) error {
 
 func (r *Router) setTodoAsDone(c *fiber.Ctx) error {
 
-	todo := model.Todo{}
+	id, err := c.ParamsInt("id")
 
-	if err := c.BodyParser(&todo); err != nil {
-		return fiber.NewError(400, "[Router] Invalid Todo body")
+	if err != nil {
+		return c.Status(401).SendString("Invalid id")
 	}
 
-	AllTodo, err := r.db.SetTodoAsDone(todo.ID)
+	AllTodo, err := r.db.SetTodoAsDone(id)
 
 	if err != nil {
 		return fiber.NewError(400, err.Error())
