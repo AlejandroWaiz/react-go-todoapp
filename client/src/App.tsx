@@ -1,5 +1,6 @@
 import { Box, List, ThemeIcon } from "@mantine/core";
-import { CheckCircleFillIcon } from "@primer/octicons-react";
+import { Button } from '@material-ui/core';
+import { CheckCircle, RadioButtonUnchecked } from '@material-ui/icons';
 import useSWR from "swr";
 import "./App.css";
 import AddTodo from "./components/AddTODO";
@@ -19,7 +20,7 @@ const fetcher = (url: string) =>
 function App() {
   const { data, mutate } = useSWR<Todo[]>("api/todos", fetcher);
 
-  async function markTodoAdDone(id: number) {
+  async function markTodoAsDone(id: number) {
     const updated = await fetch(`${ENDPOINT}/api/todos/${id}/done`, {
       method: "PATCH",
     }).then((r) => r.json());
@@ -27,38 +28,47 @@ function App() {
     mutate(updated);
   }
 
+  async function deleteTodo(id: number) {
+    const updated = await fetch(`${ENDPOINT}/api/todos/${id}/delete`, {
+      method: "DELETE",
+    }).then((r) => r.json());
+
+    mutate(updated);
+  }
+
+
+
   return (
     <Box
       sx={(theme) => ({
+        background:"white",
         padding: "2rem",
         width: "100%",
         maxWidth: "40rem",
         margin: "0 auto",
       })}
     >
-      <List spacing="xs" size="sm" mb={12} center>
-        {data?.map((todo) => {
-          return (
-            <List.Item
-              onClick={() => markTodoAdDone(todo.id)}
-              key={`todo_list__${todo.id}`}
-              icon={
-                todo.done ? (
-                  <ThemeIcon color="teal" size={24} radius="xl">
-                    <CheckCircleFillIcon size={20} />
-                  </ThemeIcon>
-                ) : (
-                  <ThemeIcon color="gray" size={24} radius="xl">
-                    <CheckCircleFillIcon size={20} />
-                  </ThemeIcon>
-                )
-              }
-            >
-              {todo.title}
-            </List.Item>
-          );
-        })}
-      </List>
+      
+<List spacing="xs" size="sm" mb={12} center>
+  {data?.map((todo) => (
+    <List.Item key={`todo_list__${todo.id}`}>
+      <div>
+        {todo.title}
+        <Button
+          onClick={() => markTodoAsDone(todo.id)}
+          startIcon={todo.done ? <CheckCircle /> : <RadioButtonUnchecked />}
+        >
+          Set as done
+        </Button>
+        <Button
+        onClick={() => deleteTodo(todo.id)}>
+          Delete
+        </Button>
+      </div>
+    </List.Item>
+  ))}
+</List>
+
 
       <AddTodo mutate={mutate} />
     </Box>
